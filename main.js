@@ -4,6 +4,9 @@ import express from 'express';
 import redis from 'redis';
 import sharp from 'sharp';
 import cron from 'node-cron';
+import dotenv  from 'dotenv'
+
+dotenv.config();
 
 const app = express();
 const redisClient = redis.createClient({ url: 'redis://redis:6379' });
