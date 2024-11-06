@@ -9,7 +9,7 @@ import dotenv  from 'dotenv'
 dotenv.config();
 
 const app = express();
-const redisClient = redis.createClient({ url: 'redis://redis:6379' });
+const redisClient = redis.createClient({ url: process.env.REDIS_URL });
 redisClient.on('error', (err) => console.error('Redis Client Error', err));
 redisClient.connect();
 
