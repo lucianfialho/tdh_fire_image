@@ -1,0 +1,14 @@
+// See https://containers.dev/implementors/json_reference/ for configuration reference
+{
+	"name": "Example Node.js project with Redis",
+	"remoteUser": "node",
+	"service": "app",
+	"dockerComposeFile": "docker-compose.yml",
+	"workspaceFolder": "/home/node/app",
+	"features": {
+		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {},
+		"ghcr.io/itsmechlark/features/redis-server:1": {},
+		"ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {}
+	},
+	"postCreateCommand": "yarn install"
+}
