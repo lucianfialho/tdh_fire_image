@@ -252,18 +252,21 @@ function defineDailyPointsDeduction() {
       for (const key of keys) {
         const sub_id = key.split(':')[1]; // Extrai o ID do usuário da chave
         
-        // Decrementar pontos
-        await redisClient.decr(key);
-        const points = await redisClient.get(key);
-        const pointsInt = parseInt(points);
+        // Obtém pontuação atual
+        const currentPoints = await redisClient.get(key);
+        const currentPointsInt = parseInt(currentPoints);
         
-        if (pointsInt <= 0) {
-          // Remover do ranking e excluir a chave de pontos
+        if (currentPointsInt <= 1) {
+          // Se pontuação <= 1, zera os pontos e remove do ranking
+          await redisClient.set(key, '0');
           await redisClient.zRem('user:ranking', sub_id);
-          await redisClient.del(key);
         } else {
-          // Atualizar no ranking
-          await updateRanking(sub_id, pointsInt);
+          // Decrementa pontuação
+          const newPoints = currentPointsInt - 1;
+          await redisClient.set(key, newPoints.toString());
+          
+          // Atualiza no ranking
+          await updateRanking(sub_id, newPoints);
         }
       }
     } catch (error) {
@@ -271,6 +274,7 @@ function defineDailyPointsDeduction() {
     }
   });
 }
+
 
 // Rota para exibir página com ranking público (HTML)
 app.get('/ranking-page', async (req, res) => {
